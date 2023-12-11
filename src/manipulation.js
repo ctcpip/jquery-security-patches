@@ -11,7 +11,6 @@ var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rscriptType = /\/(java|ecma)script/i,
 	rcleanScript = /^\s*<!(?:\[CDATA\[|\-\-)/,
 	wrapMap = {
-		option: [ 1, "<select multiple='multiple'>", "</select>" ],
 		legend: [ 1, "<fieldset>", "</fieldset>" ],
 		thead: [ 1, "<table>", "</table>" ],
 		tr: [ 2, "<table><tbody>", "</tbody></table>" ],
@@ -21,9 +20,13 @@ var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 		_default: [ 0, "", "" ]
 	};
 
-wrapMap.optgroup = wrapMap.option;
 wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
 wrapMap.th = wrapMap.td;
+
+// Support: IE <=9 only
+if ( !support.option ) {
+	wrapMap.optgroup = wrapMap.option = [ 1, "<select multiple='multiple'>", "</select>" ];
+}
 
 // IE can't serialize <link> and <script> tags normally
 if ( !jQuery.support.htmlSerialize ) {
