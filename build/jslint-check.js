@@ -1,5 +1,5 @@
 var JSLINT = require("./lib/jslint").JSLINT,
-	print = require("sys").print,
+	print = console.log,
 	src = require("fs").readFileSync("dist/jquery.js", "utf8");
 
 JSLINT(src, { evil: true, forin: true, maxerr: 100 });
