@@ -11,7 +11,7 @@
  * Copyright 2011, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Wed Feb 12 09:58:38 2014 -0800
+ * Date: Mon Dec 11 15:34:47 2023 -0600
  */
 (function( window, undefined ) {
 
@@ -38,7 +38,8 @@ var jQuery = function( selector, context ) {
 
 	// A simple way to check for HTML strings or ID strings
 	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
-	quickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/,
+	// Strict HTML recognition (#11290: must start with <)
+	quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/, // jslint ignore:line
 
 	// Check if a string has a non-whitespace character in it
 	rnotwhite = /\S/,
@@ -357,8 +358,9 @@ jQuery.extend = jQuery.fn.extend = function() {
 				src = target[ name ];
 				copy = options[ name ];
 
+				// Prevent Object.prototype pollution
 				// Prevent never-ending loop
-				if ( target === copy ) {
+				if ( name === "__proto__" || target === copy ) {
 					continue;
 				}
 

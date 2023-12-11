@@ -854,6 +854,13 @@ test("jQuery.extend(Object, Object)", function() {
 	same( options2, options2Copy, "Check if not modified: options2 must not be modified" );
 });
 
+QUnit.test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	assert.expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	assert.ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
+
 test("jQuery.each(Object,Function)", function() {
 	expect(14);
 	jQuery.each( [0,1,2], function(i, n){
