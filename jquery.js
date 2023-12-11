@@ -11,7 +11,7 @@
  * Copyright 2011, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Dec 11 15:34:47 2023 -0600
+ * Date: Mon Dec 11 15:41:51 2023 -0600
  */
 (function( window, undefined ) {
 
@@ -39,7 +39,7 @@ var jQuery = function( selector, context ) {
 	// A simple way to check for HTML strings or ID strings
 	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
 	// Strict HTML recognition (#11290: must start with <)
-	quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/, // jslint ignore:line
+	quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
 
 	// Check if a string has a non-whitespace character in it
 	rnotwhite = /\S/,
@@ -5531,7 +5531,6 @@ function winnow( elements, qualifier, keep ) {
 
 var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rleadingWhitespace = /^\s+/,
-	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
 	rtagName = /<([\w:]+)/,
 	rtbody = /<tbody/i,
 	rhtml = /<|&#?\w+;/,
@@ -5733,8 +5732,6 @@ jQuery.fn.extend({
 		} else if ( typeof value === "string" && !rnocache.test( value ) &&
 			(jQuery.support.leadingWhitespace || !rleadingWhitespace.test( value )) &&
 			!wrapMap[ (rtagName.exec( value ) || ["", ""])[1].toLowerCase() ] ) {
-
-			value = value.replace(rxhtmlTag, "<$1></$2>");
 
 			try {
 				for ( var i = 0, l = this.length; i < l; i++ ) {
@@ -6146,8 +6143,6 @@ jQuery.extend({
 				if ( !rhtml.test( elem ) ) {
 					elem = context.createTextNode( elem );
 				} else {
-					// Fix "XHTML"-style tags in all browsers
-					elem = elem.replace(rxhtmlTag, "<$1></$2>");
 
 					// Trim whitespace, otherwise indexOf won't work as expected
 					var tag = (rtagName.exec( elem ) || ["", ""])[1].toLowerCase(),
