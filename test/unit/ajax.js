@@ -70,6 +70,54 @@ test("jQuery.ajax() - success callbacks - (url, options) syntax", function() {
 	}, 13);
 });
 
+ajaxTest( "jQuery.ajax() - do not execute js (crossOrigin)", 2, function( assert ) {
+	return {
+		create: function( options ) {
+			options.crossDomain = true;
+			return jQuery.ajax( url( "data/script.php?header=ecma" ), options );
+		},
+		success: function() {
+			assert.ok( true, "success" );
+		},
+		complete: function() {
+			assert.ok( true, "complete" );
+		}
+	};
+} );
+
+ajaxTest( "jQuery.ajax() - execute js for crossOrigin when dataType option is provided", 3,
+	function( assert ) {
+		return {
+			create: function( options ) {
+				options.crossDomain = true;
+				options.dataType = "script";
+				return jQuery.ajax( url( "data/script.php?header=ecma" ), options );
+			},
+			success: function() {
+				assert.ok( true, "success" );
+			},
+			complete: function() {
+				assert.ok( true, "complete" );
+			}
+		};
+	}
+);
+
+ajaxTest( "jQuery.ajax() - do not execute js (crossOrigin)", 2, function( assert ) {
+	return {
+		create: function( options ) {
+			options.crossDomain = true;
+			return jQuery.ajax( url( "data/script.php" ), options );
+		},
+		success: function() {
+			assert.ok( true, "success" );
+		},
+		complete: function() {
+			assert.ok( true, "complete" );
+		}
+	};
+} );
+
 test("jQuery.ajax() - success callbacks (late binding)", function() {
 	expect( 8 );
 

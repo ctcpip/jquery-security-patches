@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v1.6.4
+ * jQuery JavaScript Library v1.6.5-sec
  * http://jquery.com/
  *
  * Copyright 2011, John Resig
@@ -11,7 +11,7 @@
  * Copyright 2011, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Sep 12 18:54:48 2011 -0400
+ * Date: Wed Feb 12 09:58:38 2014 -0800
  */
 (function( window, undefined ) {
 
@@ -213,7 +213,7 @@ jQuery.fn = jQuery.prototype = {
 	selector: "",
 
 	// The current version of jQuery being used
-	jquery: "1.6.4",
+	jquery: "1.6.5-sec",
 
 	// The default length of a jQuery object is 0
 	length: 0,
@@ -7755,6 +7755,13 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 
 
 
+
+// Prevent auto-execution of scripts when no explicit dataType was provided (See gh-2432)
+jQuery.ajaxPrefilter( function( s ) {
+	if ( s.crossDomain ) {
+			s.contents.script = false;
+	}
+} );
 
 // Install script dataType
 jQuery.ajaxSetup({
