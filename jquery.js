@@ -11,7 +11,7 @@
  * Copyright 2011, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Dec 11 16:39:20 2023 -0600
+ * Date: Fri Dec 15 14:14:35 2023 -0600
  */
 (function( window, undefined ) {
 
@@ -6694,7 +6694,7 @@ var r20 = /%20/g,
 	rnoContent = /^(?:GET|HEAD)$/,
 	rprotocol = /^\/\//,
 	rquery = /\?/,
-	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*< *\/ *script *>/gi,
+	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script\s*>/gi,
 	rselectTextarea = /^(?:select|textarea)/i,
 	rspacesAjax = /\s+/,
 	rts = /([?&])_=[^&]*/,
