@@ -11,7 +11,7 @@
  * Copyright 2011, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Dec 11 16:28:39 2023 -0600
+ * Date: Mon Dec 11 16:39:20 2023 -0600
  */
 (function( window, undefined ) {
 
@@ -5559,7 +5559,7 @@ wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.the
 wrapMap.th = wrapMap.td;
 
 // Support: IE <=9 only
-if ( !support.option ) {
+if ( !jQuery.support.option ) {
 	wrapMap.optgroup = wrapMap.option = [ 1, "<select multiple='multiple'>", "</select>" ];
 }
 
