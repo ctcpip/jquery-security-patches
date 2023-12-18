@@ -12,7 +12,7 @@ test("Basic requirements", function() {
 });
 
 test("jQuery()", function() {
-	expect(29);
+	expect(25);
 
 	// Basic constructor's behavior
 
@@ -56,7 +56,7 @@ test("jQuery()", function() {
 	var img = jQuery("<img/>");
 	equals( img.length, 1, "Correct number of elements generated for img" );
 	equals( img.parent().length, 0, "Make sure that the generated HTML has no parent." );
-	var div = jQuery("<div/><hr/><code/><b/>");
+	var div = jQuery("<div></div><hr><code></code><b></b>");
 	equals( div.length, 4, "Correct number of elements generated for div hr code b" );
 	equals( div.parent().length, 0, "Make sure that the generated HTML has no parent." );
 
@@ -855,10 +855,10 @@ test("jQuery.extend(Object, Object)", function() {
 });
 
 QUnit.test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
-	assert.expect( 1 );
+	expect( 1 );
 
 	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
-	assert.ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
 } );
 
 test("jQuery.each(Object,Function)", function() {
