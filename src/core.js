@@ -20,8 +20,8 @@ var jQuery = window.jQuery = window.$ = function( selector, context ) {
 };
 
 // A simple way to check for HTML strings or ID strings
-// (both of which we optimize for)
-var quickExpr = /^[^<]*(<(.|\s)+>)[^>]*$|^#(\w+)$/,
+// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+var quickExpr = /^(?:[^#<]*(<[\w\W]+>)[^>]*$|#([\w\-]*)$)/,
 
 // Is it a simple selector
 	isSimple = /^.[^:#\[\.]*$/,
@@ -54,13 +54,13 @@ jQuery.fn = jQuery.prototype = {
 
 				// HANDLE: $("#id")
 				else {
-					var elem = document.getElementById( match[3] );
+					var elem = document.getElementById( match[2] );
 
 					// Make sure an element was located
 					if ( elem ){
 						// Handle the case where IE and Opera return items
 						// by name instead of ID
-						if ( elem.id != match[3] )
+						if ( elem.id != match[2] )
 							return jQuery().find( selector );
 
 						// Otherwise, we inject the element directly into the jQuery object

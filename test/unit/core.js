@@ -226,6 +226,29 @@ test("$('html', context)", function() {
 	equals($span.length, 1, "Verify a span created with a div context works, #1763");
 });
 
+test("XSS via location.hash", function() {
+	expect(1);
+
+	stop();
+	jQuery._check9521 = function(x){
+		ok( x, "script called from #id-like selector with inline handler" );
+		jQuery("#check9521").remove();
+		delete jQuery._check9521;
+	};
+
+	var $eCheck9521 = jQuery( '#<img id="check9521" src="no-such-.gif" onerror="jQuery._check9521(false)">' );
+
+	if($eCheck9521.length) {
+		$eCheck9521.appendTo("#main");
+	}
+	else {
+		jQuery._check9521(true);
+	}
+
+	start();
+
+});
+
 if ( !isLocal ) {
 test("$(selector, xml).text(str) - Loaded via XML document", function() {
 	expect(2);
