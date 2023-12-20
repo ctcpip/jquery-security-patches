@@ -25,7 +25,7 @@ npm-debug.log*
 !/dist-module/jquery.node-module-wrapper.slim.js
 
 /external
-/node_modules
+node_modules
 
 /test/data/core/jquery-iterability-transpiled.js
 /test/data/qunit-fixture.js
