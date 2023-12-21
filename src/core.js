@@ -953,13 +953,6 @@ jQuery.extend({
 
 			// Convert html string into DOM nodes
 			if ( typeof elem == "string" ) {
-				// Fix "XHTML"-style tags in all browsers
-				elem = elem.replace(/(<(\w+)[^>]*?)\/>/g, function(all, front, tag){
-					return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ?
-						all :
-						front + "></" + tag + ">";
-				});
-
 				// Trim whitespace, otherwise indexOf won't work as expected
 				var tags = jQuery.trim( elem ).toLowerCase(), div = context.createElement("div");
 

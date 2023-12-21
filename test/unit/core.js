@@ -39,7 +39,7 @@ test("$()", function() {
 	equals( code.length, 1, "Correct number of elements generated for code" );
 	var img = $("<img/>");
 	equals( img.length, 1, "Correct number of elements generated for img" );
-	var div = $("<div/><hr/><code/><b/>");
+	var div = $("<div></div><hr><code></code><b></b>");
 	equals( div.length, 4, "Correct number of elements generated for div hr code b" );
 
 	// can actually yield more than one, when iframes are included, the window is an array as well
