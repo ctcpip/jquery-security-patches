@@ -1416,6 +1416,13 @@ test("text(String)", function() {
 	equals( j[2].nodeType, 8, "Check node,textnode,comment with text()" );
 });
 
+test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
+
 test("$.each(Object,Function)", function() {
 	expect(12);
 	$.each( [0,1,2], function(i, n){
