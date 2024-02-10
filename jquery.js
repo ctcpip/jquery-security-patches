@@ -958,10 +958,6 @@ jQuery.extend({
 				var tags = jQuery.trim( elem ).toLowerCase(), div = context.createElement("div");
 
 				var wrap =
-					// option or optgroup
-					!tags.indexOf("<opt") &&
-					[ 1, "<select multiple='multiple'>", "</select>" ] ||
-
 					!tags.indexOf("<leg") &&
 					[ 1, "<fieldset>", "</fieldset>" ] ||
 
