@@ -14,8 +14,10 @@ var
 	},
 
 	// A simple way to check for HTML strings or ID strings
-	// (both of which we optimize for)
-	quickExpr = /^[^<]*(<(.|\s)+>)[^>]*$|^#([\w-]+)$/,
+	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+	// Strict HTML recognition (#11290: must start with <)
+	quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
+
 	// Is it a simple selector
 	isSimple = /^.[^:#\[\.,]*$/;
 
@@ -45,11 +47,11 @@ jQuery.fn = jQuery.prototype = {
 
 				// HANDLE: $("#id")
 				else {
-					var elem = document.getElementById( match[3] );
+					var elem = document.getElementById( match[2] );
 
 					// Handle the case where IE and Opera return items
 					// by name instead of ID
-					if ( elem && elem.id != match[3] )
+					if ( elem && elem.id != match[2] )
 						return jQuery().find( selector );
 
 					// Otherwise, we inject the element directly into the jQuery object
@@ -575,8 +577,9 @@ jQuery.extend = jQuery.fn.extend = function() {
 			for ( var name in options ) {
 				var src = target[ name ], copy = options[ name ];
 
+				// Prevent Object.prototype pollution
 				// Prevent never-ending loop
-				if ( target === copy )
+				if ( name === "__proto__" || target === copy )
 					continue;
 
 				// Recurse if we're merging object values
@@ -857,21 +860,10 @@ jQuery.extend({
 
 			// Convert html string into DOM nodes
 			if ( typeof elem === "string" ) {
-				// Fix "XHTML"-style tags in all browsers
-				elem = elem.replace(/(<(\w+)[^>]*?)\/>/g, function(all, front, tag){
-					return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ?
-						all :
-						front + "></" + tag + ">";
-				});
-
 				// Trim whitespace, otherwise indexOf won't work as expected
 				var tags = elem.replace(/^\s+/, "").substring(0, 10).toLowerCase();
 
 				var wrap =
-					// option or optgroup
-					!tags.indexOf("<opt") &&
-					[ 1, "<select multiple='multiple'>", "</select>" ] ||
-
 					!tags.indexOf("<leg") &&
 					[ 1, "<fieldset>", "</fieldset>" ] ||
 
