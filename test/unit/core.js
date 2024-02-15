@@ -39,7 +39,7 @@ test("jQuery()", function() {
 	equals( code.length, 1, "Correct number of elements generated for code" );
 	var img = jQuery("<img/>");
 	equals( img.length, 1, "Correct number of elements generated for img" );
-	var div = jQuery("<div/><hr/><code/><b/>");
+	var div = $("<div></div><hr><code></code><b></b>");
 	equals( div.length, 4, "Correct number of elements generated for div hr code b" );
 
 	// can actually yield more than one, when iframes are included, the window is an array as well
@@ -290,6 +290,29 @@ test("jQuery('html', context)", function() {
 	var $div = jQuery("<div/>");
 	var $span = jQuery("<span/>", $div);
 	equals($span.length, 1, "Verify a span created with a div context works, #1763");
+});
+
+test("XSS via location.hash", function() {
+	expect(1);
+
+	stop();
+	jQuery._check9521 = function(x){
+		ok( x, "script called from #id-like selector with inline handler" );
+		jQuery("#check9521").remove();
+		delete jQuery._check9521;
+	};
+
+	var $eCheck9521 = jQuery( '#<img id="check9521" src="no-such-.gif" onerror="jQuery._check9521(false)">' );
+
+	if($eCheck9521.length) {
+		$eCheck9521.appendTo("#main");
+	}
+	else {
+		jQuery._check9521(true);
+	}
+
+	start();
+
 });
 
 if ( !isLocal ) {
@@ -1659,6 +1682,13 @@ test("text(String)", function() {
 	equals( j[1].nodeValue, " there ", "Check node,textnode,comment with text()" );
 	equals( j[2].nodeType, 8, "Check node,textnode,comment with text()" );
 });
+
+test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
 
 test("jQuery.each(Object,Function)", function() {
 	expect(12);
