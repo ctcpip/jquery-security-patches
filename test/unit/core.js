@@ -509,7 +509,7 @@ test("XSS via location.hash", function() {
 		delete jQuery._check9521;
 	};
 
-	var $eCheck9521 = jQuery( '#<img id="check9521" src="no-such-.gif" onerror="jQuery._check9521(false)">' );
+	var $eCheck9521 = jQuery( '#<img id="check9521" src="no-such-.gif" onerror="jQuery._check9521(false)"' );
 
 	if($eCheck9521.length) {
 		$eCheck9521.appendTo("#main");
