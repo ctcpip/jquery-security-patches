@@ -16,8 +16,9 @@ var jQuery = function( selector, context ) {
 	rootjQuery,
 
 	// A simple way to check for HTML strings or ID strings
-	// (both of which we optimize for)
-	quickExpr = /^(?:[^<]*(<[\w\W]+>)[^>]*$|#([\w\-]+)$)/,
+	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+	// Strict HTML recognition (#11290: must start with <)
+	quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
 
 	// Is it a simple selector
 	isSimple = /^.[^:#\[\.,]*$/,
@@ -344,8 +345,9 @@ jQuery.extend = jQuery.fn.extend = function() {
 				src = target[ name ];
 				copy = options[ name ];
 
+				// Prevent Object.prototype pollution
 				// Prevent never-ending loop
-				if ( target === copy ) {
+				if ( name === "__proto__" || target === copy ) {
 					continue;
 				}
 

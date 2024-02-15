@@ -1,7 +1,7 @@
 (function( jQuery ) {
 
 var jsc = jQuery.now(),
-	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*< *\/ *script *>?/gi,
 	rselectTextarea = /^(?:select|textarea)/i,
 	rinput = /^(?:color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
 	rnoContent = /^(?:GET|HEAD)$/,

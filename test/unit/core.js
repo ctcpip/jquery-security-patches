@@ -55,7 +55,7 @@ test("jQuery()", function() {
 	var img = jQuery("<img/>");
 	equals( img.length, 1, "Correct number of elements generated for img" );
 	equals( img.parent().length, 0, "Make sure that the generated HTML has no parent." );
-	var div = jQuery("<div/><hr/><code/><b/>");
+	var div = jQuery("<div></div><hr><code></code><b></b>");
 	equals( div.length, 4, "Correct number of elements generated for div hr code b" );
 	equals( div.parent().length, 0, "Make sure that the generated HTML has no parent." );
 
@@ -498,6 +498,36 @@ test("jQuery('html', context)", function() {
 	var $span = jQuery("<span/>", $div);
 	equals($span.length, 1, "Verify a span created with a div context works, #1763");
 });
+
+test("XSS via location.hash", function() {
+	expect(1);
+
+	stop();
+	jQuery._check9521 = function(x){
+		ok( x, "script called from #id-like selector with inline handler" );
+		jQuery("#check9521").remove();
+		delete jQuery._check9521;
+	};
+
+	var $eCheck9521 = jQuery( '#<img id="check9521" src="no-such-.gif" onerror="jQuery._check9521(false)">' );
+
+	if($eCheck9521.length) {
+		$eCheck9521.appendTo("#main");
+	}
+	else {
+		jQuery._check9521(true);
+	}
+
+	start();
+
+});
+
+test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
 
 if ( !isLocal ) {
 test("jQuery(selector, xml).text(str) - Loaded via XML document", function() {
