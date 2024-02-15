@@ -23,7 +23,7 @@ var jQuery = window.jQuery = window.$ = function( selector, context ) {
 // A simple way to check for HTML strings or ID strings
 // Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
 // Strict HTML recognition (#11290: must start with <)
-quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
+var quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
 
 // Is it a simple selector
 	isSimple = /^.[^:#\[\.]*$/,
