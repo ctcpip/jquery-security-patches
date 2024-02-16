@@ -70,6 +70,69 @@ test("jQuery.ajax() - success callbacks - (url, options) syntax", function() {
 	}, 13);
 });
 
+test("jQuery.ajax() - do not execute js (crossOrigin)", function() {
+	expect(2);
+
+	var base = window.location.href.replace(/[^\/]*$/, "");
+
+	stop();
+
+	jQuery.ajax({
+		url: base + "data/script.php?header=ecma",
+		crossDomain: true,
+		success: function(data){
+			ok( true, "success" );
+			start();
+		},
+		complete: function() {
+			ok( true, "complete" );
+		}
+	});
+});
+
+test( "jQuery.ajax() - execute js for crossOrigin when dataType option is provided",
+	function() {
+		expect(3);
+
+		var base = window.location.href.replace(/[^\/]*$/, "");
+
+		stop();
+
+		jQuery.ajax({
+			url: base + "data/script.php?header=ecma",
+			crossDomain: true,
+			dataType: "script",
+			success: function(data){
+				ok( true, "success" );
+				start();
+			},
+			complete: function() {
+				ok( true, "complete" );
+			}
+		});
+	}
+);
+
+test("jQuery.ajax() - do not execute js (crossOrigin)", function() {
+	expect(2);
+
+	var base = window.location.href.replace(/[^\/]*$/, "");
+
+	stop();
+
+	jQuery.ajax({
+		url: base + "data/script.php",
+		crossDomain: true,
+		success: function(data){
+			ok( true, "success" );
+			start();
+		},
+		complete: function() {
+			ok( true, "complete" );
+		}
+	});
+});
+
 test("jQuery.ajax() - success callbacks (late binding)", function() {
 	expect( 8 );
 
