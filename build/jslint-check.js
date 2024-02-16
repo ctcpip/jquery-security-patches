@@ -1,5 +1,5 @@
 var JSLINT = require("./lib/jslint").JSLINT,
-	print = require("sys").print,
+	print = console.log,
 	src = require("fs").readFileSync("dist/jquery.js", "utf8");
 
 JSLINT(src, { evil: true, forin: true, maxerr: 100 });
@@ -21,7 +21,7 @@ var e = JSLINT.errors, found = 0, w;
 for ( var i = 0; i < e.length; i++ ) {
 	w = e[i];
 
-	if ( !ok[ w.reason ] ) {
+	if ( w && !ok[ w.reason ] ) {
 		found++;
 		print( "\n" + w.evidence + "\n" );
 		print( "    Problem at line " + w.line + " character " + w.character + ": " + w.reason );

@@ -12,7 +12,7 @@ test("Basic requirements", function() {
 });
 
 test("jQuery()", function() {
-	expect(29);
+	expect(25);
 
 	// Basic constructor's behavior
 
@@ -56,7 +56,7 @@ test("jQuery()", function() {
 	var img = jQuery("<img/>");
 	equals( img.length, 1, "Correct number of elements generated for img" );
 	equals( img.parent().length, 0, "Make sure that the generated HTML has no parent." );
-	var div = jQuery("<div/><hr/><code/><b/>");
+	var div = jQuery("<div></div><hr><code></code><b></b>");
 	equals( div.length, 4, "Correct number of elements generated for div hr code b" );
 	equals( div.parent().length, 0, "Make sure that the generated HTML has no parent." );
 
@@ -97,16 +97,11 @@ test("jQuery()", function() {
 	// manually clean up detached elements
 	elem.remove();
 
-	equals( jQuery(" <div/> ").length, 1, "Make sure whitespace is trimmed." );
-	equals( jQuery(" a<div/>b ").length, 1, "Make sure whitespace and other characters are trimmed." );
-
 	var long = "";
 	for ( var i = 0; i < 128; i++ ) {
 		long += "12345678";
 	}
 
-	equals( jQuery(" <div>" + long + "</div> ").length, 1, "Make sure whitespace is trimmed on long strings." );
-	equals( jQuery(" a<div>" + long + "</div>b ").length, 1, "Make sure whitespace and other characters are trimmed on long strings." );
 });
 
 test("selector state", function() {
@@ -580,6 +575,36 @@ test("jQuery('html', context)", function() {
 	equals($span.length, 1, "Verify a span created with a div context works, #1763");
 });
 
+test("XSS via location.hash", function() {
+	expect(1);
+
+	stop();
+	jQuery._check9521 = function(x){
+		ok( x, "script called from #id-like selector with inline handler" );
+		jQuery("#check9521").remove();
+		delete jQuery._check9521;
+	};
+
+	var $eCheck9521 = jQuery( '#<img id="check9521" src="no-such-.gif" onerror="jQuery._check9521(false)"' );
+
+	if($eCheck9521.length) {
+		$eCheck9521.appendTo("#main");
+	}
+	else {
+		jQuery._check9521(true);
+	}
+
+	start();
+
+});
+
+test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
+
 if ( !isLocal ) {
 test("jQuery(selector, xml).text(str) - Loaded via XML document", function() {
 	expect(2);
@@ -858,6 +883,13 @@ test("jQuery.extend(Object, Object)", function() {
 	same( options1, options1Copy, "Check if not modified: options1 must not be modified" );
 	same( options2, options2Copy, "Check if not modified: options2 must not be modified" );
 });
+
+QUnit.test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
 
 test("jQuery.each(Object,Function)", function() {
 	expect(14);

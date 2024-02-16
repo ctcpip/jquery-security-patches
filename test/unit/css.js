@@ -23,7 +23,7 @@ test("css(String|Hash)", function() {
 	equals( div.css("width"), "4px", "Width on disconnected node." );
 	equals( div.css("height"), "4px", "Height on disconnected node." );
 
-	var div2 = jQuery( "<div style='display:none;'><input type='text' style='height:20px;'/><textarea style='height:20px;'/><div style='height:20px;'></div></div>").appendTo("body");
+	var div2 = jQuery( "<div style='display:none;'><input type='text' style='height:20px;'/><textarea style='height:20px;'></textarea><div style='height:20px;'></div></div>").appendTo("body");
 
 	equals( div2.find("input").css("height"), "20px", "Height on hidden input." );
 	equals( div2.find("textarea").css("height"), "20px", "Height on hidden textarea." );
