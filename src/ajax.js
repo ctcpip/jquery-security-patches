@@ -1,7 +1,7 @@
 (function( jQuery ) {
 
 var jsc = jQuery.now(),
-	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*< *\/ *script *>?/gi,
 	rselectTextarea = /^(?:select|textarea)/i,
 	rinput = /^(?:color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
 	rnoContent = /^(?:GET|HEAD)$/,
@@ -682,7 +682,7 @@ jQuery.extend({
 				data = jQuery.parseJSON( data );
 
 			// If the type is "script", eval it in global context
-			} else if ( type === "script" || !type && ct.indexOf("javascript") >= 0 ) {
+			} else if ( type === "script" ) {
 				jQuery.globalEval( data );
 			}
 		}
