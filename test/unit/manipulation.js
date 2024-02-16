@@ -1261,7 +1261,7 @@ var testHtml = function(valueObj) {
 	}
 	ok( pass, "Set HTML" );
 
-	div = jQuery("<div/>").html( valueObj("<div id='parent_1'><div id='child_1'/></div><div id='parent_2'/>") );
+	div = jQuery("<div>").html( valueObj("<div id='parent_1'><div id='child_1'></div></div><div id='parent_2'></div>") );
 
 	equal( div.children().length, 2, "Make sure two child nodes exist." );
 	equal( div.children().children().length, 1, "Make sure that a grandchild exists." );
