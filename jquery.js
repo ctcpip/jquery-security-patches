@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v1.4.4
+ * jQuery JavaScript Library v1.4.5-sec
  * http://jquery.com/
  *
  * Copyright 2010, John Resig
@@ -11,7 +11,7 @@
  * Copyright 2010, The Dojo Foundation
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Nov 11 19:04:53 2010 -0500
+ * Date: Thu Feb 15 16:39:20 2024 -0600
  */
 (function( window, undefined ) {
 
@@ -35,8 +35,9 @@ var jQuery = function( selector, context ) {
 	rootjQuery,
 
 	// A simple way to check for HTML strings or ID strings
-	// (both of which we optimize for)
-	quickExpr = /^(?:[^<]*(<[\w\W]+>)[^>]*$|#([\w\-]+)$)/,
+	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
+	// Strict HTML recognition (#11290: must start with <)
+	quickExpr = /^(?:(<[\w\W]+>)[^>]*|#([\w-]*))$/,
 
 	// Is it a simple selector
 	isSimple = /^.[^:#\[\.,]*$/,
@@ -211,7 +212,7 @@ jQuery.fn = jQuery.prototype = {
 	selector: "",
 
 	// The current version of jQuery being used
-	jquery: "1.4.4",
+	jquery: "1.4.5-sec",
 
 	// The default length of a jQuery object is 0
 	length: 0,
@@ -363,8 +364,9 @@ jQuery.extend = jQuery.fn.extend = function() {
 				src = target[ name ];
 				copy = options[ name ];
 
+				// Prevent Object.prototype pollution
 				// Prevent never-ending loop
-				if ( target === copy ) {
+				if ( name === "__proto__" || target === copy ) {
 					continue;
 				}
 
@@ -4623,7 +4625,6 @@ function winnow( elements, qualifier, keep ) {
 
 var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rleadingWhitespace = /^\s+/,
-	rxhtmlTag = /<(?!area|br|col|embed|hr|img|input|link|meta|param)(([\w:]+)[^>]*)\/>/ig,
 	rtagName = /<([\w:]+)/,
 	rtbody = /<tbody/i,
 	rhtml = /<|&#?\w+;/,
@@ -4632,7 +4633,6 @@ var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 	rchecked = /checked\s*(?:[^=]|=\s*.checked.)/i,
 	raction = /\=([^="'>\s]+\/)>/g,
 	wrapMap = {
-		option: [ 1, "<select multiple='multiple'>", "</select>" ],
 		legend: [ 1, "<fieldset>", "</fieldset>" ],
 		thead: [ 1, "<table>", "</table>" ],
 		tr: [ 2, "<table><tbody>", "</tbody></table>" ],
@@ -4642,7 +4642,6 @@ var rinlinejQuery = / jQuery\d+="(?:\d+|null)"/g,
 		_default: [ 0, "", "" ]
 	};
 
-wrapMap.optgroup = wrapMap.option;
 wrapMap.tbody = wrapMap.tfoot = wrapMap.colgroup = wrapMap.caption = wrapMap.thead;
 wrapMap.th = wrapMap.td;
 
@@ -4855,8 +4854,6 @@ jQuery.fn.extend({
 		} else if ( typeof value === "string" && !rnocache.test( value ) &&
 			(jQuery.support.leadingWhitespace || !rleadingWhitespace.test( value )) &&
 			!wrapMap[ (rtagName.exec( value ) || ["", ""])[1].toLowerCase() ] ) {
-
-			value = value.replace(rxhtmlTag, "<$1></$2>");
 
 			try {
 				for ( var i = 0, l = this.length; i < l; i++ ) {
@@ -5104,8 +5101,6 @@ jQuery.extend({
 				elem = context.createTextNode( elem );
 
 			} else if ( typeof elem === "string" ) {
-				// Fix "XHTML"-style tags in all browsers
-				elem = elem.replace(rxhtmlTag, "<$1></$2>");
 
 				// Trim whitespace, otherwise indexOf won't work as expected
 				var tag = (rtagName.exec( elem ) || ["", ""])[1].toLowerCase(),
@@ -5566,7 +5561,7 @@ if ( jQuery.expr && jQuery.expr.filters ) {
 
 
 var jsc = jQuery.now(),
-	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+	rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*< *\/ *script *>?/gi,
 	rselectTextarea = /^(?:select|textarea)/i,
 	rinput = /^(?:color|date|datetime|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/i,
 	rnoContent = /^(?:GET|HEAD)$/,
@@ -6247,7 +6242,7 @@ jQuery.extend({
 				data = jQuery.parseJSON( data );
 
 			// If the type is "script", eval it in global context
-			} else if ( type === "script" || !type && ct.indexOf("javascript") >= 0 ) {
+			} else if ( type === "script" ) {
 				jQuery.globalEval( data );
 			}
 		}

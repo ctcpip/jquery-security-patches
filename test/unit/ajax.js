@@ -989,8 +989,8 @@ test("jQuery.ajax() - malformed JSON", function() {
 	});
 });
 
-test("jQuery.ajax() - script by content-type", function() {
-	expect(1);
+test("jQuery.ajax() - do not execute script by content-type if dataType is not script", function() {
+	expect(0);
 
 	stop();
 
@@ -1000,6 +1000,21 @@ test("jQuery.ajax() - script by content-type", function() {
 		success: function() {
 	  		start();
 		}
+	});
+});
+
+test("jQuery.ajax() - execute script by content-type if dataType is script", function() {
+	expect(1);
+
+	stop();
+
+	jQuery.ajax({
+		url: "data/script.php",
+		data: { header: "script" },
+		success: function() {
+	  		start();
+		},
+		dataType: 'script'
 	});
 });
 

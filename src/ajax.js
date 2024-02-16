@@ -682,7 +682,7 @@ jQuery.extend({
 				data = jQuery.parseJSON( data );
 
 			// If the type is "script", eval it in global context
-			} else if ( type === "script" || !type && ct.indexOf("javascript") >= 0 ) {
+			} else if ( type === "script" ) {
 				jQuery.globalEval( data );
 			}
 		}
