@@ -67,6 +67,70 @@ test("jQuery.ajax() - success callbacks - (url, options) syntax", function() {
 	}, 13);
 });
 
+test( "jQuery.ajax() - do not execute js (crossOrigin) 1", 2, function() {
+
+	jQuery.ajaxSetup({ timeout: 0 });
+
+	stop();
+
+	setTimeout(function(){
+		jQuery.ajax({
+			url: url( "data/script.php?header=ecma" ),
+			crossDomain: true,
+			success: function() {
+				ok( true, "success" );
+			},
+			complete: function() {
+				ok( true, "complete" );
+				start();
+			}
+		});
+	}, 13);
+} );
+
+test( "jQuery.ajax() - execute js for crossOrigin when dataType option is provided", 3, function() {
+
+	jQuery.ajaxSetup({ timeout: 0 });
+
+	stop();
+
+	setTimeout(function(){
+		jQuery.ajax({
+			url: url( "data/script.php?header=ecma" ),
+			crossDomain: true,
+			dataType: "script",
+			success: function() {
+				ok( true, "success" );
+			},
+			complete: function() {
+				ok( true, "complete" );
+				start();
+			}
+		});
+	}, 13);
+} );
+
+test( "jQuery.ajax() - do not execute js (crossOrigin) 2", 2, function() {
+
+	jQuery.ajaxSetup({ timeout: 0 });
+
+	stop();
+
+	setTimeout(function(){
+		jQuery.ajax({
+			url: url( "data/script.php" ),
+			crossDomain: true,
+			success: function() {
+				ok( true, "success" );
+			},
+			complete: function() {
+				ok( true, "complete" );
+				start();
+			}
+		});
+	}, 13);
+} );
+
 test("jQuery.ajax() - success callbacks (late binding)", function() {
 	expect( 8 );
 

@@ -1,6 +1,6 @@
 [submodule "src/sizzle"]
 	path = src/sizzle
-	url = git://github.com/jquery/sizzle.git
+	url = https://github.com/jquery/sizzle.git
 [submodule "test/qunit"]
 	path = test/qunit
-	url = git://github.com/jquery/qunit.git
+	url = https://github.com/qunitjs/qunit.git

@@ -24,10 +24,10 @@ test("jQuery()", function() {
 		main = jQuery("#qunit-fixture"),
 		code = jQuery("<code/>"),
 		img = jQuery("<img/>"),
-		div = jQuery("<div/><hr/><code/><b/>"),
+		div = jQuery("<div></div><hr><code></code><b></b>"),
 		exec = false,
 		lng = "",
-		expected = 26,
+		expected = 24,
 		attrObj = {
 			"click": function() { ok( exec, "Click executed." ); },
 			"text": "test",
@@ -61,9 +61,15 @@ test("jQuery()", function() {
 	equal( jQuery(undefined).length, 0, "jQuery(undefined) === jQuery([])" );
 	equal( jQuery(null).length, 0, "jQuery(null) === jQuery([])" );
 	equal( jQuery("").length, 0, "jQuery('') === jQuery([])" );
-	equal( jQuery("#").length, 0, "jQuery('#') === jQuery([])" );
 
 	equal( jQuery(obj).selector, "div", "jQuery(jQueryObj) == jQueryObj" );
+
+	// Invalid #id will throw an error (gh-1682)
+	try {
+		jQuery( "#" );
+	} catch ( e ) {
+		ok( true, "Threw an error on #id with no id" );
+	}
 
 	// can actually yield more than one, when iframes are included, the window is an array as well
 	equal( jQuery(window).length, 1, "Correct number of elements generated for jQuery(window)" );
@@ -139,15 +145,13 @@ test("jQuery()", function() {
 	// manually clean up detached elements
 	elem.remove();
 
-	equal( jQuery(" <div/> ").length, 1, "Make sure whitespace is trimmed." );
-	equal( jQuery(" a<div/>b ").length, 1, "Make sure whitespace and other characters are trimmed." );
+	equal( jQuery("<div></div> ").length, 1, "Make sure whitespace is trimmed." );
 
 	for ( i = 0; i < 128; i++ ) {
 		lng += "12345678";
 	}
 
-	equal( jQuery(" <div>" + lng + "</div> ").length, 1, "Make sure whitespace is trimmed on long strings." );
-	equal( jQuery(" a<div>" + lng + "</div>b ").length, 1, "Make sure whitespace and other characters are trimmed on long strings." );
+	equal( jQuery("<div>" + lng + "</div> ").length, 1, "Make sure whitespace is trimmed on long strings." );
 });
 
 test("selector state", function() {
@@ -664,6 +668,13 @@ test("jQuery('html', context)", function() {
 	equal($span.length, 1, "Verify a span created with a div context works, #1763");
 });
 
+test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
+
 test("jQuery(selector, xml).text(str) - Loaded via XML document", function() {
 	expect(2);
 
@@ -979,6 +990,13 @@ test("jQuery.extend(Object, Object)", function() {
 	deepEqual( options1, options1Copy, "Check if not modified: options1 must not be modified" );
 	deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
 });
+
+QUnit.test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	ok( !( "devMode" in {} ), "Object.prototype not polluted" );
+} );
 
 test("jQuery.each(Object,Function)", function() {
 	expect(14);
