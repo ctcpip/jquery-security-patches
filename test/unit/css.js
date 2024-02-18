@@ -25,7 +25,7 @@ QUnit.test( "css(String|Hash)", function( assert ) {
 	assert.equal( div.css( "width" ), "4px", "Width on disconnected node." );
 	assert.equal( div.css( "height" ), "4px", "Height on disconnected node." );
 
-	div2 = jQuery( "<div style='display:none;'><input type='text' style='height:20px;'/><textarea style='height:20px;'/><div style='height:20px;'></div></div>" ).appendTo( "body" );
+	div2 = jQuery( "<div style='display:none;'><input type='text' style='height:20px;'/><textarea style='height:20px;'></textarea><div style='height:20px;'></div></div>" ).appendTo( "body" );
 
 	assert.equal( div2.find( "input" ).css( "height" ), "20px", "Height on hidden input." );
 	assert.equal( div2.find( "textarea" ).css( "height" ), "20px", "Height on hidden textarea." );

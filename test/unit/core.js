@@ -17,7 +17,7 @@ QUnit.test( "jQuery()", function( assert ) {
 		obj = jQuery( "div" ),
 		code = jQuery( "<code/>" ),
 		img = jQuery( "<img/>" ),
-		div = jQuery( "<div/><hr/><code/><b/>" ),
+		div = jQuery( "<div></div><hr><code></code><b></b>" ),
 		exec = false,
 		expected = 23,
 		attrObj = {
@@ -60,9 +60,15 @@ QUnit.test( "jQuery()", function( assert ) {
 	equal( jQuery( undefined ).length, 0, "jQuery(undefined) === jQuery([])" );
 	equal( jQuery( null ).length, 0, "jQuery(null) === jQuery([])" );
 	equal( jQuery( "" ).length, 0, "jQuery('') === jQuery([])" );
-	equal( jQuery( "#" ).length, 0, "jQuery('#') === jQuery([])" );
 
 	equal( jQuery( obj ).selector, "div", "jQuery(jQueryObj) == jQueryObj" );
+
+	// Invalid #id will throw an error (gh-1682)
+	try {
+		jQuery( "#" );
+	} catch ( e ) {
+		ok( true, "Threw an error on #id with no id" );
+	}
 
 	// can actually yield more than one, when iframes are included, the window is an array as well
 	assert.equal( jQuery( window ).length, 1, "Correct number of elements generated for jQuery(window)" );
@@ -1244,6 +1250,13 @@ QUnit.test( "jQuery.extend(Object, Object)", function( assert ) {
 	assert.deepEqual( defaults, defaultsCopy, "Check if not modified: options1 must not be modified" );
 	assert.deepEqual( options1, options1Copy, "Check if not modified: options1 must not be modified" );
 	assert.deepEqual( options2, options2Copy, "Check if not modified: options2 must not be modified" );
+} );
+
+QUnit.test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	assert.ok( !( "devMode" in {} ), "Object.prototype not polluted" );
 } );
 
 QUnit.test( "jQuery.extend(Object, Object {created with \"defineProperties\"})", function( assert ) {

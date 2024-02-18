@@ -2,7 +2,7 @@
   "name": "jquery",
   "title": "jQuery",
   "description": "JavaScript library for DOM operations",
-  "version": "1.12.4",
+  "version": "1.12.5-sec",
   "main": "dist/jquery.js",
   "homepage": "http://jquery.com",
   "author": {
@@ -81,5 +81,8 @@
       "Traversing",
       "Wrap"
     ]
+  },
+  "overrides": {
+    "graceful-fs": "^4.2.11"
   }
 }

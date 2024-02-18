@@ -67,6 +67,47 @@ QUnit.module( "ajax", {
 		};
 	} );
 
+	ajaxTest( "jQuery.ajax() - do not execute js (crossOrigin) 1", 2, function( assert ) {
+		return {
+			url: url( "data/script.php?header=ecma" ),
+			crossDomain: true,
+			success: function() {
+				assert.ok( true, "success" );
+			},
+			complete: function() {
+				assert.ok( true, "complete" );
+			}
+		};
+	} );
+
+	ajaxTest( "jQuery.ajax() - execute js for crossOrigin when dataType option is provided", 3, function( assert ) {
+		return {
+			setup: addGlobalEvents( "ajaxStart ajaxStop ajaxSend ajaxComplete ajaxSuccess", assert ),
+			url: url( "data/script.php?header=ecma" ),
+			crossDomain: true,
+			dataType: "script",
+			success: function() {
+				assert.ok( true, "success" );
+			},
+			complete: function() {
+				assert.ok( true, "complete" );
+			}
+		};
+	} );
+
+	ajaxTest( "jQuery.ajax() - do not execute js (crossOrigin) 2", 2, function( assert ) {
+		return {
+			url: url( "data/script.php" ),
+			crossDomain: true,
+			success: function() {
+				assert.ok( true, "success" );
+			},
+			complete: function() {
+				assert.ok( true, "complete" );
+			}
+		};
+	} );
+
 	ajaxTest( "jQuery.ajax() - success callbacks - (url, options) syntax", 8, function( assert ) {
 		return {
 			setup: addGlobalEvents( "ajaxStart ajaxStop ajaxSend ajaxComplete ajaxSuccess", assert ),

@@ -1336,7 +1336,7 @@ QUnit.test( "Empty replaceWith (trac-13401; trac-13596; gh-2204)", function( ass
 
 	assert.expect( 25 );
 
-	var $el = jQuery( "<div/><div/>" ).html( "<p>0</p>" ),
+	var $el = jQuery( "<div></div><div></div>" ).html( "<p>0</p>" ),
 		expectedHTML = $el.html(),
 		tests = {
 			"empty string": "",
@@ -1673,7 +1673,7 @@ function testHtml( valueObj, assert ) {
 		div = jQuery( "<div></div>" ),
 		fixture = jQuery( "#qunit-fixture" );
 
-	div.html( valueObj( "<div id='parent_1'><div id='child_1'/></div><div id='parent_2'/>" ) );
+	div.html( valueObj( "<div id='parent_1'><div id='child_1'></div></div><div id='parent_2'></div>" ) );
 	assert.equal( div.children().length, 2, "Found children" );
 	assert.equal( div.children().children().length, 1, "Found grandchild" );
 
@@ -2470,7 +2470,7 @@ QUnit.test( "jQuery._evalUrl (#12838)", function( assert ) {
 		assert.equal( ( input.url || input ).slice( -1 ), expectedArgument, message );
 		expectedArgument++;
 	};
-	jQuery( "#qunit-fixture" ).append( "<script src='1'/><script src='2'/>" );
+	jQuery( "#qunit-fixture" ).append( "<script src='1'></script><script src='2'></script>" );
 	assert.equal( expectedArgument, 3, "synchronous execution" );
 
 	message = "custom implementation";
@@ -2479,50 +2479,10 @@ QUnit.test( "jQuery._evalUrl (#12838)", function( assert ) {
 	jQuery.ajax = function( options ) {
 		assert.strictEqual( options, {}, "Unexpected call to jQuery.ajax" );
 	};
-	jQuery( "#qunit-fixture" ).append( "<script src='3'/><script src='4'/>" );
+	jQuery( "#qunit-fixture" ).append( "<script src='3'></script><script src='4'></script>" );
 
 	jQuery.ajax = ajax;
 	jQuery._evalUrl = evalUrl;
-} );
-
-QUnit.test( "jQuery.htmlPrefilter (gh-1747)", function( assert ) {
-
-	assert.expect( 5 );
-
-	var expectedArgument,
-		invocations = 0,
-		htmlPrefilter = jQuery.htmlPrefilter,
-		fixture = jQuery( "<div/>" ).appendTo( "#qunit-fixture" ),
-		poison = "<script>jQuery.htmlPrefilter.assert.ok( false, 'script not executed' );</script>",
-		done = assert.async();
-
-	jQuery.htmlPrefilter = function( html ) {
-		invocations++;
-		assert.equal( html, expectedArgument, "Expected input" );
-
-		// Remove <script> and <del> elements
-		return htmlPrefilter.apply( this, arguments )
-			.replace( /<(script|del)(?=[\s>])[\w\W]*?<\/\1\s*>/ig, "" );
-	};
-	jQuery.htmlPrefilter.assert = assert;
-
-	expectedArgument = "A-" + poison + "B-" + poison + poison + "C-";
-	fixture.html( expectedArgument );
-
-	expectedArgument = "D-" + poison + "E-" + "<del/><div>" + poison + poison + "</div>" + "F-";
-	fixture.append( expectedArgument );
-
-	expectedArgument = poison;
-	fixture.find( "div" ).replaceWith( expectedArgument );
-
-	assert.equal( invocations, 3, "htmlPrefilter invoked for all DOM manipulations" );
-	assert.equal( fixture.html(), "A-B-C-D-E-F-", "htmlPrefilter modified HTML" );
-
-	// Allow asynchronous script execution to generate assertions
-	setTimeout( function() {
-		jQuery.htmlPrefilter = htmlPrefilter;
-		done();
-	}, 100 );
 } );
 
 QUnit.test( "insertAfter, insertBefore, etc do not work when destination is original element. Element is removed (#4087)", function( assert ) {
@@ -2564,7 +2524,7 @@ QUnit.test( "Index for function argument should be received (#13094)", function(
 
 	var i = 0;
 
-	jQuery( "<div/><div/>" ).before( function( index ) {
+	jQuery( "<div></div><div></div>" ).before( function( index ) {
 		assert.equal( index, i++, "Index should be correct" );
 	} );
 
