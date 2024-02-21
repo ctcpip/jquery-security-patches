@@ -17,7 +17,7 @@ QUnit.test( "jQuery()", function( assert ) {
 		obj = jQuery( "div" ),
 		code = jQuery( "<code/>" ),
 		img = jQuery( "<img/>" ),
-		div = jQuery( "<div/><hr/><code/><b/>" ),
+		div = jQuery( "<div></div><hr/><code></code><b/>" ),
 		exec = false,
 		expected = 23,
 		attrObj = {
