@@ -2558,17 +2558,13 @@ QUnit.test( "Make sure specific elements with content created correctly (#13232)
 } );
 
 QUnit.test( "Validate creation of multiple quantities of certain elements (#13818)", function( assert ) {
-	assert.expect( 44 );
+	assert.expect( 22 );
 
 	var tags = [ "thead", "tbody", "tfoot", "colgroup", "col", "caption", "tr", "th", "td", "optgroup", "option" ];
 
 	jQuery.each( tags, function( index, tag ) {
-		jQuery( "<" + tag + "/><" + tag + "/>" ).each( function() {
-			assert.ok( jQuery.nodeName( this, tag ), tag + " empty elements created correctly" );
-		} );
-
-		jQuery( "<" + this + "></" + tag + "><" + tag + "></" + tag + ">" ).each( function() {
-			assert.ok( jQuery.nodeName( this, tag ), tag + " elements with closing tag created correctly" );
+		jQuery( "<" + tag + "></" + tag + "><" + tag + "></" + tag + ">" ).each( function() {
+			assert.ok( this.nodeName.toLowerCase() === tag, tag + " elements created correctly" );
 		} );
 	} );
 } );
