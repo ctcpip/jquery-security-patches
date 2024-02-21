@@ -17,7 +17,7 @@ QUnit.test( "jQuery()", function( assert ) {
 		obj = jQuery( "div" ),
 		code = jQuery( "<code/>" ),
 		img = jQuery( "<img/>" ),
-		div = jQuery( "<div/><hr/><code/><b/>" ),
+		div = jQuery( "<div></div><hr/><code></code><b/>" ),
 		exec = false,
 		expected = 23,
 		attrObj = {
@@ -1226,6 +1226,13 @@ QUnit.test( "jQuery.extend(true,{},{a:[], o:{}}); deep copy with array, followed
 
 	assert.deepEqual( result, initial, "The [result] and [initial] have equal shape and values" );
 	assert.ok( !jQuery.isArray( result.object ), "result.object wasn't paved with an empty array" );
+} );
+
+QUnit.test( "jQuery.extend( true, ... ) Object.prototype pollution", function( assert ) {
+	assert.expect( 1 );
+
+	jQuery.extend( true, {}, JSON.parse( "{\"__proto__\": {\"devMode\": true}}" ) );
+	assert.ok( !( "devMode" in {} ), "Object.prototype not polluted" );
 } );
 
 QUnit.test( "jQuery.each(Object,Function)", function( assert ) {
